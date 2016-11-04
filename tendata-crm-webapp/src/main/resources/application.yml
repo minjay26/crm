@@ -1,0 +1,43 @@
+server:
+  port: 8026
+
+logging:
+  path: logs/
+  level:
+    root: INFO
+
+spring:
+  profiles.active: mysql,dev
+  jpa:
+    open-in-view: true
+    show-sql: true
+    properties:
+      jadira.usertype.autoRegisterUserTypes: true
+    hibernate:
+      ddl-auto: update
+  thymeleaf:
+      enabled: true
+      cache: false
+      mode: LEGACYHTML5
+
+security:
+  ignored: /favicon.ico,css/**,/js/**,/fonts/**,/img/**,/webjars/**,/admin/app/**,/admin/assets/**,/admin/css/**,/admin/html/**,/admin/images/**
+
+---
+spring:
+  profiles: mysql
+  datasource:
+    driver-class-name: ${datasource.driver-class-name:com.mysql.jdbc.Driver}
+    url: ${datasource.url:jdbc:mysql://localhost:3306/tendata_wenda}
+    username: ${datasource.username:root}
+    password: ${datasource.password:}
+    test-while-idle: true
+    test-on-borrow: true
+    validation-query: SELECT 1
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: validate
+
+
+

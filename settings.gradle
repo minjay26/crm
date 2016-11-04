@@ -1,0 +1,5 @@
+rootProject.name = 'crm'
+include 'tendata-crm-core'
+include 'tendata-crm-admin-manager'
+include 'tendata-crm-webapp'
+

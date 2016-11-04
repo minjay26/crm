@@ -1,0 +1,23 @@
+group 'cn.tendata'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':tendata-crm-core')
+    compile "org.springframework:spring-webmvc"
+    compile "org.springframework:spring-web"
+    compile "org.springframework.security:spring-security-core"
+    compile "org.springframework.security:spring-security-config"
+    compile "com.fasterxml.jackson.core:jackson-databind"
+    compile "javax.servlet:javax.servlet-api"
+    compile "commons-io:commons-io"
+    compile "net.sourceforge.nekohtml:nekohtml:${nekohtmlVersion}"
+
+}
