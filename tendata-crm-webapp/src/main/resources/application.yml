@@ -14,6 +14,7 @@ spring:
     properties:
       jadira.usertype.autoRegisterUserTypes: true
     hibernate:
+      naming-strategy: cn.tendata.crm.data.jpa.config.CustomNamingStrategy
       ddl-auto: update
   thymeleaf:
       enabled: true
@@ -28,16 +29,16 @@ spring:
   profiles: mysql
   datasource:
     driver-class-name: ${datasource.driver-class-name:com.mysql.jdbc.Driver}
-    url: ${datasource.url:jdbc:mysql://localhost:3306/tendata_wenda}
+    url: ${datasource.url:jdbc:mysql://localhost:3306/tendata_crm}
     username: ${datasource.username:root}
-    password: ${datasource.password:}
+    password: ${datasource.password:password}
     test-while-idle: true
     test-on-borrow: true
     validation-query: SELECT 1
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
 
 
 

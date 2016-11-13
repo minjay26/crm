@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class HomeController {
 
-    @RequestMapping(value = "/index")
+    @RequestMapping(value = "/")
     public String Home(){
-       return "home";
+       return "admin/home";
     }
 }
