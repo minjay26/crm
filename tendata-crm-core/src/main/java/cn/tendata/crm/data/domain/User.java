@@ -1,5 +1,6 @@
 package cn.tendata.crm.data.domain;
 
+import cn.tendata.crm.util.SecurityAccess;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,22 +20,29 @@ public class User extends AbstractEntityAuditable<Integer> implements UserDetail
 
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue
+    private Integer id;
+
     private String username;
 
     private String password;
 
-    private String stringAuthorities;
+    private String stringAuthorities= SecurityAccess.ACCESS_ALL;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(this.stringAuthorities));
+        authorities.add(new SimpleGrantedAuthority(this.getStringAuthorities()));
         return authorities;
     }
 
-    @Id
-    @GeneratedValue
+    @Override
     public Integer getId() {
-        return super.getId();
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getUsername() {
