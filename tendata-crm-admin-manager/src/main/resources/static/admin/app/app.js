@@ -21,8 +21,8 @@ var app = angular.module('app', [
 
     .config(function ($routeProvider) { // 用于页面跳转
 
-        $routeProvider.when('/dashboard', {
-            templateUrl: 'app/dashboard/dashboard.html',
+        $routeProvider.when('/emails', {
+            templateUrl: 'app/email/email.html',
             controller: 'DashboardCtrl'
         }).when('/customer_service', {
             templateUrl: 'app/customer_service/customer_service_list.html',

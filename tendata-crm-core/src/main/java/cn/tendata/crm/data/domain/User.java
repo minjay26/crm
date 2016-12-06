@@ -1,7 +1,7 @@
 package cn.tendata.crm.data.domain;
 
-import cn.tendata.crm.util.SecurityAccess;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -28,11 +28,10 @@ public class User extends AbstractEntityAuditable<Integer> implements UserDetail
 
     private String password;
 
-    private String stringAuthorities= SecurityAccess.ACCESS_ALL;
+    private String stringAuthorities;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(this.getStringAuthorities()));
+        List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(this.getStringAuthorities());
         return authorities;
     }
 

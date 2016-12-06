@@ -7,7 +7,15 @@ angular.module('app')
         // -------------- menu set ------------------//
         $scope.datalists = [
 
-            {name: '我的工单', href: 'customer_service', menuIcon: 'fa-users'},
+            {
+                name: '我的办公桌',
+                childrenSign: 0,
+                children: [ {
+                    name: '电子邮件',
+                    href:'emails'
+                } ],
+                menuIcon: 'fa-desktop'
+            },
 
         ];
 

@@ -18,6 +18,7 @@ dependencies {
     compile "commons-beanutils:commons-beanutils"
     compile "org.apache.poi:poi"
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile "org.springframework.security:spring-security-core"
     compile group: 'com.google.code.gson', name: 'gson', version: '2.6.2'
     compile group: 'com.qiniu', name: 'happy-dns-java', version: '0.1.4'
     compile "org.springframework.security:spring-security-core"
