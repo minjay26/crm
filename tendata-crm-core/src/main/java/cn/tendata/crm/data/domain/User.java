@@ -1,10 +1,12 @@
 package cn.tendata.crm.data.domain;
 
+import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -29,6 +31,8 @@ public class User extends AbstractEntityAuditable<Integer> implements UserDetail
     private String password;
 
     private String stringAuthorities;
+
+    private String mailBox;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(this.getStringAuthorities());
@@ -68,6 +72,15 @@ public class User extends AbstractEntityAuditable<Integer> implements UserDetail
         this.stringAuthorities = stringAuthorities;
     }
 
+    @Email
+    @Column(name = "mail_box",nullable = false)
+    public String getMailBox() {
+        return mailBox;
+    }
+
+    public void setMailBox(String mailBox) {
+        this.mailBox = mailBox;
+    }
 
     public boolean isAccountNonExpired() {
         return true;

@@ -1,0 +1,23 @@
+<div ng-controller="MailController">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h3 class="modal-title">邮件回复</h3>
+    </div>
+    <div class="modal-body">
+        <div>
+            收件人： <input name="recipient" type="text" disabled="true"
+                        value="{{editModel.fromUser.username}}"/><br><br><br>
+            回复内容 ： <textarea ng-model="replyContent" class="send-email" rows="10"></textarea><br><br><br>
+        </div>
+        <div><a href="javascript:;" class="a-upload" id="a-upload">
+            <input type="file" name="" id="file">上传附件
+        </a>
+            <div>
+                <button type="submit" class="btn btn-primary" ng-click="reply()">发送</button>
+                <button class="btn btn-default" type="button" ng-click="cancel()">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

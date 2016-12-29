@@ -1,14 +1,18 @@
 package cn.tendata.crm.data.domain;
 
 import cn.tendata.crm.data.EmailSource;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created by Luo Min on 2016/12/6.
  */
 @Entity
-public class Email extends AbstractEntityAuditable<Long>{
+public class Mail extends AbstractEntityAuditable<Long>{
 
     private static final long serialVersionUID = 1L;
 
@@ -18,9 +22,15 @@ public class Email extends AbstractEntityAuditable<Long>{
 
     private boolean deleted;
 
+    private String title;
+
     private String content;
 
     private EmailSource source;
+
+    private Collection<MailAttachment> attachments=Collections.emptyList();
+
+    private boolean readed;
 
     @Override
     @Id
@@ -40,7 +50,8 @@ public class Email extends AbstractEntityAuditable<Long>{
         this.fromUser = fromUser;
     }
 
-    @Column(name = "to_user_id",nullable = false)
+    @OneToOne
+    @JoinColumn(name = "to_user_id")
     public User getToUser() {
         return toUser;
     }
@@ -58,6 +69,17 @@ public class Email extends AbstractEntityAuditable<Long>{
         this.deleted = deleted;
     }
 
+    @NotNull
+    @Column(name = "title", nullable = false)
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    @NotNull
     @Lob
     @Column(name = "content",nullable = false)
     public String getContent() {
@@ -76,5 +98,23 @@ public class Email extends AbstractEntityAuditable<Long>{
 
     public void setSource(EmailSource source) {
         this.source = source;
+    }
+
+    @OneToMany(cascade={CascadeType.PERSIST,CascadeType.REMOVE},fetch = FetchType.LAZY,mappedBy = "mail")
+    public Collection<MailAttachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(Collection<MailAttachment> attachments) {
+        this.attachments = attachments;
+    }
+
+    @Column(name = "readed")
+    public boolean isReaded() {
+        return readed;
+    }
+
+    public void setReaded(boolean readed) {
+        this.readed = readed;
     }
 }

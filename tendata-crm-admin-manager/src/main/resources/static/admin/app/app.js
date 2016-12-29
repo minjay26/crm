@@ -23,10 +23,10 @@ var app = angular.module('app', [
 
         $routeProvider.when('/emails', {
             templateUrl: 'app/email/email.html',
-            controller: 'DashboardCtrl'
-        }).when('/customer_service', {
-            templateUrl: 'app/customer_service/customer_service_list.html',
-            controller: 'CustomerServiceCtrl'
+            controller: 'MailController'
+        }).when('/emails/edit', {
+            templateUrl: 'app/email/preview.html',
+            controller: 'MailController'
         }).when('/customer_service/delete', {
             templateUrl: 'app/customer_service/customer_service_delete.html',
             controller: 'CustomerServiceDeleteCtrl'
