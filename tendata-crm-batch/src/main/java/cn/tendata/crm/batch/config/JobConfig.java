@@ -11,6 +11,7 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
 import org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -25,6 +26,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.PathResource;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import javax.sql.DataSource;
 
 /**
  * Created by Luo Min on 2016/12/28.
@@ -39,15 +43,27 @@ public class JobConfig {
     @Autowired
     private StepBuilderFactory stepBuilders;
 
+//    @Autowired
+//    private DataSource dataSource;
+
+//    @Bean
+//    public JobRepository jobRepository() throws Exception {
+//        return new MapJobRepositoryFactoryBean().getObject();
+//    }
+
     @Bean
-    public JobRepository jobRepository() throws Exception {
-        return new MapJobRepositoryFactoryBean().getObject();
+    public JobRepository jobRepository(DataSource dataSource,PlatformTransactionManager transactionManager) throws Exception {
+        JobRepositoryFactoryBean jobRepositoryFactory = new JobRepositoryFactoryBean();
+        jobRepositoryFactory.setDataSource(dataSource);
+        jobRepositoryFactory.setDatabaseType("MYSQL");
+        jobRepositoryFactory.setTransactionManager(transactionManager);
+        return jobRepositoryFactory.getObject();
     }
 
     @Bean
-    public SimpleJobLauncher jobLauncher() throws Exception {
+    public SimpleJobLauncher jobLauncher(DataSource dataSource,PlatformTransactionManager transactionManager) throws Exception {
         SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
-        jobLauncher.setJobRepository(jobRepository());
+        jobLauncher.setJobRepository(jobRepository(dataSource,transactionManager));
         return jobLauncher;
     }
 

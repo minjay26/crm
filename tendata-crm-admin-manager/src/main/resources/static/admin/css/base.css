@@ -7,3 +7,15 @@
     width: 300px;
 }
 
+.hidden-item {
+    display: none;
+}
+
+.reply-background {
+    background-color: #C1D9F3;
+}
+
+.loading{
+    background: url(../assets/img/submiting.gif) no-repeat center;
+}
+

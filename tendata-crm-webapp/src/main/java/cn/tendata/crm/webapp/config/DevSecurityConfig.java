@@ -47,6 +47,7 @@ public class DevSecurityConfig extends WebSecurityConfigurerAdapter {
 				.formLogin()
 				.permitAll()
 				.and()
+				.csrf().disable()
 				.logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
             .and()

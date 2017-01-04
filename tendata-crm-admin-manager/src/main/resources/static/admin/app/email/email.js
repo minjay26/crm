@@ -2,7 +2,7 @@
 
 angular.module('app')
 
-    .controller('MailController', function ($scope, $rootScope,$location,$http,$routeParams, $window, $cookies, optionUrl) {
+    .controller('MailController', function ($scope, $rootScope, FileUploader, $location, $http, $routeParams, $window, $cookies, optionUrl) {
         $scope.currentPage = 1;
         $scope.maxSize = 6;
         $scope.itemsPerPage = 10;
@@ -10,6 +10,8 @@ angular.module('app')
             startDate: null,
             endDate: null
         }
+        $scope.isHide = false;
+        $scope.loading = false;
 
         $scope.filterOptions = {
             availableOptions: [
@@ -72,8 +74,15 @@ angular.module('app')
 
         $scope.previewMail=function (item) {
             $rootScope.mail = {};
-            $scope.mail.title = '编辑通道';
             $rootScope.editModel = item;
+            $http({
+                method: "post",
+                url: optionUrl.mailRead,
+                data: {
+                    id: item.id
+                }
+            });
+
             $location.url('emails/edit?id=' + item.id);
 
         }
@@ -82,135 +91,39 @@ angular.module('app')
             $location.url('/emails');
         }
 
-        $(document)     //图片上传点击事件
-            .on('change',
-                '#file',
-                function () {
-                    btnUpload();
-                });
 
+        $scope.uploader = new FileUploader({
+            url: optionUrl.upload,
+            queueLimit: 2
+        });
 
-        var btnUpload = function () {
-            var token = $scope.token;
-            var file = {
-                name: '',
-                size: '',
-                type: '',
-                sourceLink: ''
-            };
-            $scope.fileSizeError = false;
-            $scope.uploadBtn = false;
-            var Qiniu_upload = function (f, token, key) {
-                $scope.uploadBtn = false;
-
-                var fileName = f.name;
-                var fileSize = (f.size) / 1024;
-                var fileType = f.type;
-                var format = fileName.slice(fileName.lastIndexOf(".") + 1).toLowerCase(),
-                    typeArr = ['jpg', 'png', 'gif', 'doc', 'docx', 'xlsx', 'csv', 'xls', 'pdf', 'rar', 'zip'];
-
-                if (typeArr.indexOf(format) === (-1)) {
-                    $scope.fileSizeError = true;
-                    $scope.error = '文件格式错误';
-                    $scope.uploadBtn = true;
-                    $("#file").val('');
-                    $scope.$apply();
-                } else if (fileSize > 5 * 1024 || $scope.files >= 3) {
-                    $scope.fileSizeError = true;
-                    $scope.error = '每个文件限制大小在5MB以内';
-                    $scope.uploadBtn = true;
-                    $("#file").val('');
-                    $scope.$apply();
-                } else {
-
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('POST', qiNiu.QI_NIU_UPLOAD_URL, true);
-                    var formData, startDate;
-                    formData = new FormData();
-                    if (key !== null && key !== undefined) formData.append('key', key);
-                    formData.append('token', $scope.token);
-                    formData.append('file', f);
-                    var taking;
-                    xhr.upload.addEventListener("progress", function (evt) {
-                        if (evt.lengthComputable) {
-                            $scope.fileSizeError = true;
-                            $scope.error = '文件正在上传中。。。。。。';
-
-                            var nowDate = new Date().getTime();
-                            taking = nowDate - startDate;
-                            var x = (evt.loaded) / 1024;
-                            var y = taking / 1000;
-                            var uploadSpeed = (x / y);
-                            var formatSpeed;
-                            if (uploadSpeed > 1024) {
-                                formatSpeed = (uploadSpeed / 1024).toFixed(2) + "Mb\/s";
-                            } else {
-                                formatSpeed = uploadSpeed.toFixed(2) + "Kb\/s";
-                            }
-                            var percentComplete = Math.round(evt.loaded * 100 / evt.total);
-                            if (percentComplete != 100) {
-                                $scope.uploadBtn = false;
-                                $scope.$apply();
-                            } else {
-                                $scope.fileSizeError = false;
-                                $scope.uploadBtn = true;
-                                if ($scope.files.length == 2)
-                                    $scope.uploadBtn = false;
-                                $scope.$apply();
-                            }
-                            $scope.$apply();
-                        }
-                    }, false);
-
-                    xhr.onreadystatechange = function (response) {
-                        if (xhr.readyState == 4 && xhr.status == 200 && xhr.responseText != "") {
-                            $scope.repeatBtn = true;
-                            var blkRet = JSON.parse(xhr.responseText);
-                            $scope.isHaveUpLoadFile = true;
-                            file.sourceLink = qiNiu.DOMAIN + blkRet.key;
-                            file.name = fileName;
-                            file.size = fileSize;
-                            file.type = format;
-                            saveAttachment(file);
-                            file.size = convertFilesize(fileSize);
-                            upLoadFiles.push(file);
-                            $scope.files = upLoadFiles;
-                            $scope.isHaveUpLoadFile = true;
-                            $scope.uploadBtn = true;
-                            if ($scope.files.length >= 3) {
-                                $scope.uploadBtn = false;
-                                $scope.$apply();
-                            }
-                            $("#file").val('');
-                            $scope.$apply();
-                            console && console.log(blkRet);
-                        } else if (xhr.status != 200 && xhr.responseText) {
-
-                        }
-                    };
-
-                    startDate = new Date().getTime();
-                    $("#progressbar").show();
-                    xhr.send(formData);
-                }
-            };
-            if ($("#file")[0].files.length > 0 && $scope.token != "") {
-                if ($("#file")[0].files.length + $scope.files.length > 3) {
-                    $scope.fileSizeError = true;
-                    $scope.error = '最多上传三个文件';
-                    $("#file").val('');
-                    $scope.$apply();
-                    return;
-                }
-                Qiniu_upload($("#file")[0].files[0], $scope.token, new Date().format('yyyyddMMhhmmss') + $("#file")[0].files[0].name);
-
-            } else {
-                console && console.log("form input error");
-            }
+        $scope.beginReply = function () {
+            $scope.isHide = !$scope.isHide;
         }
 
+
+
+
        $scope.reply = function(){
-           alert($scope.replyContent);
+           $http({
+               method: "post",
+               url: optionUrl.mailSubmit,
+               data: {
+                   fromMailId: $rootScope.editModel.id,
+                   content: $scope.replyContent,
+                   title: $scope.title,
+                   toUser: $rootScope.editModel.fromUser.id,
+               },
+               headers: {
+                   'Content-Type': 'application/json;charset=utf-8'
+               }
+           }).success(function (data, status) { // 成功与后台完成交互
+               $scope.isHide = false;
+               $scope.replyContentShow = true;
+
+           }).error(function (data, status) {
+               $scope.replyMsg = "邮件发送失败，请重试";
+           });
        }
 
         if (!$scope.items) {

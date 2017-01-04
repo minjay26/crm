@@ -1,6 +1,7 @@
 package cn.tendata.crm.data.domain;
 
 import cn.tendata.crm.data.EmailSource;
+import cn.tendata.crm.data.MailType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -29,6 +30,10 @@ public class Mail extends AbstractEntityAuditable<Long>{
     private EmailSource source;
 
     private Collection<MailAttachment> attachments=Collections.emptyList();
+
+    private Mail replyMail;
+
+    private MailType type;
 
     private boolean readed;
 
@@ -107,6 +112,26 @@ public class Mail extends AbstractEntityAuditable<Long>{
 
     public void setAttachments(Collection<MailAttachment> attachments) {
         this.attachments = attachments;
+    }
+
+    @OneToOne
+    @JoinColumn(name = "reply_mail_id")
+    public Mail getReplyMail() {
+        return replyMail;
+    }
+
+    public void setReplyMail(Mail replyMail) {
+        this.replyMail = replyMail;
+    }
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "type",nullable = false)
+    public MailType getType() {
+        return type;
+    }
+
+    public void setType(MailType type) {
+        this.type = type;
     }
 
     @Column(name = "readed")

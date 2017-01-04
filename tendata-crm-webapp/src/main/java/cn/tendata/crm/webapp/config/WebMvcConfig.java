@@ -1,6 +1,9 @@
 package cn.tendata.crm.webapp.config;
 
 import cn.tendata.crm.admin.web.bind.support.CurrentUserHandlerMethodArgumentResolver;
+import cn.tendata.crm.qiniu.QiniuManager;
+import cn.tendata.crm.qiniu.QiniuManagerImpl;
+import com.qiniu.storage.UploadManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +23,13 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter{
     public CurrentUserHandlerMethodArgumentResolver currentUserHandlerMethodArgumentResolver() {
         return new CurrentUserHandlerMethodArgumentResolver();
     }
+
+    @Bean
+    public QiniuManager qiniuManager() {
+        return new QiniuManagerImpl();
+    }
+
+
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {

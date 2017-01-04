@@ -8,5 +8,8 @@ angular.module('app')
 
         mails: "mails",
         mail: "mails/{id}",
+        upload: "mails/upload",
+        mailSubmit: "mails/reply",
+        mailRead:"mails/read"
     });
 

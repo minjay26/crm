@@ -12,7 +12,7 @@ public class MailAttachment extends AbstractEntityAuditable<Long>{
 
     private String name;
 
-    private String size;
+    private long size;
 
     private String url;
 
@@ -37,11 +37,11 @@ public class MailAttachment extends AbstractEntityAuditable<Long>{
     }
 
     @Column(name = "size",nullable = false)
-    public String getSize() {
+    public long getSize() {
         return size;
     }
 
-    public void setSize(String size) {
+    public void setSize(long size) {
         this.size = size;
     }
 

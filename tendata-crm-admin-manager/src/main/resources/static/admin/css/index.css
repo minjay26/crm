@@ -60,6 +60,14 @@ select option {
     padding: 5px;
 }
 
+.success {
+    color: green;
+    display: inline-block;
+    height: 32px;
+    text-align: center;
+    padding: 5px;
+}
+
 .td-tab-form {
     margin-top: 30px;
 }

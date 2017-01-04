@@ -11,12 +11,13 @@ var app = angular.module('app', [
         'ngRoute',
         'ui.bootstrap',
         'ngCookies',
-        'toggle-switch'
+        'toggle-switch',
+        'angularFileUpload'
     ])
     .config(function ($httpProvider) {
-        var header = angular.element("meta[name='_csrf_header']").attr("content");
-        var token = angular.element("meta[name='_csrf']").attr("content");
-        $httpProvider.defaults.headers.common[header] = token;
+        // var header = angular.element("meta[name='_csrf_header']").attr("content");
+        // var token = angular.element("meta[name='_csrf']").attr("content");
+        // $httpProvider.defaults.headers.common[header] = token;
     })
 
     .config(function ($routeProvider) { // 用于页面跳转

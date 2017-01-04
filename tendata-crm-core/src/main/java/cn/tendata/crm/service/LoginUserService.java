@@ -19,7 +19,7 @@ public class LoginUserService implements UserDetailsService {
 
         User user=repository.findByUsername(username);
         if (user==null) {
-            throw new UsernameNotFoundException("该用户不存在");
+            throw new UsernameNotFoundException("user :"+username+" not exist");
         }
         return user;
     }
