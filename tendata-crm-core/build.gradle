@@ -3,6 +3,17 @@
 repositories {
     mavenCentral()
 }
+sourceSets {
+    generated {
+        java {
+            srcDirs = ['src/main/generated']
+        }
+    }
+}
+
+configurations {
+    querydslapt
+}
 
 dependencies {
     compile "org.springframework:spring-aspects"
@@ -17,6 +28,7 @@ dependencies {
     compile "org.apache.commons:commons-lang3"
     compile "commons-beanutils:commons-beanutils"
     compile "org.apache.poi:poi"
+    compile "com.mysema.querydsl:querydsl-jpa"
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile "org.springframework.security:spring-security-core"
     compile group: 'com.google.code.gson', name: 'gson', version: '2.6.2'
@@ -24,5 +36,39 @@ dependencies {
     compile "org.springframework.security:spring-security-core"
     compile "org.springframework.security:spring-security-config"
     compile 'com.qiniu:qiniu-java-sdk:7.2.+'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.4.3.RELEASE'
     testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    querydslapt "com.mysema.querydsl:querydsl-apt"
+
+}
+task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
+    source = sourceSets.main.java
+    classpath = configurations.compile + configurations.querydslapt
+    options.compilerArgs = [
+            "-proc:only",
+            "-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
+    ]
+    destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
+}
+
+compileJava {
+    dependsOn generateQueryDSL
+    source generateQueryDSL.destinationDir
+}
+
+compileGeneratedJava {
+    dependsOn generateQueryDSL
+    options.warnings = false
+    classpath += sourceSets.main.runtimeClasspath
+}
+
+clean {
+    delete sourceSets.generated.java.srcDirs
+}
+
+idea {
+    module {
+        sourceDirs += file('src/main/generated')
+    }
 }

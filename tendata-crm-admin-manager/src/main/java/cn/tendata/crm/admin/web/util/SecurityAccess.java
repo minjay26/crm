@@ -4,9 +4,9 @@ public abstract class SecurityAccess {
 
     public static final String PERMISSION_PREFIX = "CRM:";
 
-    public static final String PERMISSION_ADMIN_VIEW = PERMISSION_PREFIX + "ADMIN:VIEW";
+    public static final String PERMISSION_ADMIN = PERMISSION_PREFIX + "ADMIN";
 
-    public static final String HAS_PERMISSION_ADMIN_VIEW = "hasAuthority('" + PERMISSION_ADMIN_VIEW + "')";
+    public static final String HAS_PERMISSION_ADMIN_VIEW = "hasAuthority('" + PERMISSION_ADMIN + "')";
 
 
     public static String hasAuthority(String authority) {

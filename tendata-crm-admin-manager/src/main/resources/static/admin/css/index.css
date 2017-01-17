@@ -68,6 +68,9 @@ select option {
     padding: 5px;
 }
 
+.ok {
+    color: green;
+}
 .td-tab-form {
     margin-top: 30px;
 }

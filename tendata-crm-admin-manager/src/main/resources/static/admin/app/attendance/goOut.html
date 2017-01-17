@@ -1,0 +1,66 @@
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/admin/">首页</a></li>
+            <li class="active">外出登记</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-content">
+        <ul class="nav nav-pills nav-justified" role="tablist">
+            <li role="presentation"><a href="#/attendance/working_register">上下班登记</a></li>
+            <li role="presentation"  class="active"><a href="#/attendance/goout_register">外出登记</a></li>
+            <li role="presentation"><a href="#/attendance/leave_register">请假登记</a></li>
+            <li role="presentation"><a href="#/attendance/businessTrip_register">出差登记</a></li>
+            <li role="presentation"><a href="#/attendance/working_records">上下班记录</a></li>
+        </ul><hr>
+        <div class="text-center"><button type="button" class="btn btn-primary" ng-click="goOutSwitch(1)">外出登记</button>         <button type="button" class="btn btn-info" ng-click="goOutSwitch(2)">外出记录</button></div>
+
+        <div id="goOutRegister" ng-hide="registerHided" >
+         外出原因：<input type="text" name="reason" ng-model="reason"><br><br>
+         外出时间：<span><input type="text" ng-model="date" disabled></span>由 <input type="time" name="startDate" ng-model="startDate">至<input type="time" name="endDate" ng-model="endDate"><br><br>
+         审批人：            <select ng-class="form-control"
+                                 ng-options="option.username for option in approvers"
+                                 ng-model="approvers.selectedOption"></select><br><br>
+            <button type="button" class="btn btn-primary btn-sm" ng-click="apply()">申请</button>
+        </div>
+
+        <div id="goOutRecord" ng-hide="recordHided" >
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>登记类型</th>
+                    <th>登记时间</th>
+                </tr>
+                </thead>
+
+                <tbody ng-repeat="item in items">
+                <tr>
+                    <td>{{$index+1}}</td>
+                    <td>{{item.regulation.registrationType}}</td>
+                    <td>{{item.registrationDate | date:'yyyy-MM-dd HH:mm'}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div style="margin-top:-30px;height:50px;float:right;">
+                <uib-pagination
+                        total-items="totalItems"
+                        ng-model="currentPage"
+                        max-size="maxSize"
+                        class="pagination-sm"
+                        boundary-links="true"
+                        rotate="true"
+                        num-pages="numPages"
+                        items-per-page="itemsPerPage"
+                        first-text="首页"
+                        previous-text="上一页"
+                        next-text="下一页"
+                        last-text="末页"
+                        ng-change="pageChanged()">
+                </uib-pagination>
+            </div>
+        </div>
+    </div>
+</div>

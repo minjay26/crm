@@ -15,8 +15,10 @@
             <select ng-class="form-control"
                     ng-options="option.name for option in filterOptions.availableOptions track by option.value"
                     ng-model="filterOptions.selectedOption"
-                    ng-click="changeFilter()"></select>
+                    ng-change="changeCategory(filterOptions.selectedOption)"></select>
+            <a href="#/emails/submit" class="btn btn-primary btn-sm active" role="button">发邮件</a>
         </div>
+
 
         <table class="table table-striped table-bordered table-hover" >
             <thead>

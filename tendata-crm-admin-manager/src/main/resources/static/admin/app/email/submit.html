@@ -1,0 +1,94 @@
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/admin/">首页</a></li>
+            <li class="active">发送邮件</li>
+        </ul>
+    </div>
+</div>
+
+<div class="content">
+    <div class="main-header">
+    </div>
+    <div class="main-content">
+        <div>
+            <button type="button" class="btn btn-info btn-sm" ng-click="">内部邮件</button>
+            <button type="button" class="btn btn-info btn-sm" ng-click="">外部邮件</button>
+        </div>
+        <hr>
+        <div>
+            <form class="form-horizontal" role="form" id="mailForm">
+                <div class="form-group">
+                    <label for="toUser" class="col-sm-1 control-label">收件人</label>
+                    <!--<div class="col-sm-10">-->
+                        <!--<input type="email" class="form-control" id="toUser" ng-model="submit_toUser">-->
+                    <!--</div>-->
+                    <div class="dropdown">
+                        <select ng-class="form-control"
+                                ng-options="option.name for option in filterOptions.availableOptions track by option.value"
+                                ng-model="filterOptions.selectedOption"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="title" class="col-sm-1 control-label">主题</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="title" ng-model="submit_title">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="content" class="col-sm-1 control-label">内容</label>
+                    <textarea id="content" name="content" form="mailForm" rows="10" style="width: 600px;" ng-model="submit_content"></textarea>
+                </div>
+                <div><a href="javascript:;" class="a-upload" id="a-upload">
+                    <input type="file" nv-file-select="" uploader="uploader"/>上传附件
+                    <!--<input type="file" name="file" id="file" ng-change="upload($event)" ng-model="fileName">上传附件-->
+                </a>
+                    <span class="glyphicon glyphicon-warning-sign">注：最多只能上传两个附件</span>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th width="50%">Name</th>
+                            <th ng-show="uploader.isHTML5">Size</th>
+                            <th ng-show="uploader.isHTML5">Progress</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in uploader.queue">
+                            <td><strong>{{ item.file.name }}</strong></td>
+                            <td ng-show="uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                            <td ng-show="uploader.isHTML5">
+                                <div class="progress" style="margin-bottom: 0;">
+                                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                            </td>
+                            <td nowrap>
+                                <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                    <span class="glyphicon glyphicon-upload"></span> Upload
+                                </button>
+                                <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                    <span class="glyphicon glyphicon-trash"></span> Remove
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button  class="btn btn-primary" ng-click="submit();">发送</button>
+                        <button  class="btn btn-primary">保存到草稿箱</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+</div>
+    </div>
+</div>

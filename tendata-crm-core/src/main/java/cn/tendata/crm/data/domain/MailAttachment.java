@@ -10,6 +10,8 @@ import javax.persistence.*;
 @Entity
 public class MailAttachment extends AbstractEntityAuditable<Long>{
 
+    private static final long serialVersionUID = 1L;
+
     private String name;
 
     private long size;

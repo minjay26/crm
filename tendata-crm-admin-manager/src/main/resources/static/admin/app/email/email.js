@@ -22,15 +22,24 @@ angular.module('app')
                 {value: '5', name: '外发邮件箱'},
                 {value: '6', name: '已删除'},
                 {value: '7', name: '查询邮件'},
+
+
+
             ],
             selectedOption: {value: '1', name: '未读邮件'}
         };
 
-        function getData() { // 从后台获取数据
+        $scope.changeCategory = function (e) {
+            var index = e.value;
+            getData(index);
+        }
+
+        function getData(index) { // 从后台获取数据
             $scope.loadDivVisible = true;
             $http.get(optionUrl.mails, {
                 withCredentials: true,
                 params: {
+                    category :index,
                     page: $scope.currentPage - 1,
                 }
             }).success(function (data) { // 成功从后台获取数据
@@ -50,6 +59,12 @@ angular.module('app')
         $scope.search = function () {
             getData();
         };
+
+        $scope.submit=function () {
+            var toUser = $scope.submit_toUser,
+                title = $scope.submit_title,
+                content = $scope.submit_content;
+        }
 
         $scope.getById = function (id) {
             var url = optionUrl.mail;
@@ -75,13 +90,13 @@ angular.module('app')
         $scope.previewMail=function (item) {
             $rootScope.mail = {};
             $rootScope.editModel = item;
-            $http({
-                method: "post",
-                url: optionUrl.mailRead,
-                data: {
-                    id: item.id
+            $http.get(optionUrl.mailRead, {
+                withCredentials: true,
+                params: {
+                    id: item.id,
                 }
-            });
+            })
+
 
             $location.url('emails/edit?id=' + item.id);
 

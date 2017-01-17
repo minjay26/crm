@@ -2,25 +2,26 @@ package cn.tendata.crm.admin.web.controller;
 
 import cn.tendata.crm.admin.web.bind.annotation.CurrentUser;
 import cn.tendata.crm.admin.web.model.JsonResponse;
+import cn.tendata.crm.admin.web.model.ReplyMailDto;
 import cn.tendata.crm.admin.web.model.SubmitMailDto;
 import cn.tendata.crm.data.EmailSource;
 import cn.tendata.crm.data.MailType;
 import cn.tendata.crm.data.domain.Mail;
 import cn.tendata.crm.data.domain.MailAttachment;
 import cn.tendata.crm.data.domain.User;
+import cn.tendata.crm.externalmail.MailSenderBuilder;
 import cn.tendata.crm.service.MailAttachmentService;
 import cn.tendata.crm.service.MailService;
 import cn.tendata.crm.service.UserService;
 import com.qiniu.http.Response;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +47,6 @@ public class MailController {
     private final MailAttachmentService attachmentService;
     private final UserService userService;
 
-
     @Autowired
     public MailController(MailService mailService,
                           MailAttachmentService attachmentService,
@@ -57,17 +57,25 @@ public class MailController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<Page<Mail>> getALlUnRead(
+    public ResponseEntity<Page<Mail>> getMails(
+            @RequestParam(name = "category", defaultValue = "1") Integer category,
                                      @PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable,
                                      @CurrentUser User user) {
-        Page<Mail> mails = mailService.getAllByReaded(user, false, pageable);
+        Page<Mail> mails = mailService.getAllByCategory(user, category, pageable);
+
+//        SimpleMailMessage mailMessage =new SimpleMailMessage();
+//        mailMessage.setFrom("minjay26@163.com");
+//        mailMessage.setTo("823785135@qq.com");
+//        mailMessage.setSubject("好好学习");
+//        mailMessage.setText("test 学习第一");
+//        MailSenderBuilder.mailSender(user).send(mailMessage);
         return new ResponseEntity<>(mails,HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Mail> getMail(@PathVariable("id") Long id){
         Mail mail=mailService.getById(id);
-        return new ResponseEntity<Mail>(mail,HttpStatus.OK);
+        return new ResponseEntity<>(mail,HttpStatus.OK);
     }
 
 
@@ -94,27 +102,28 @@ public class MailController {
         return response;
     }
 
-    @RequestMapping(value = "/read",method = RequestMethod.POST)
-    public ResponseEntity<Void> read(@RequestParam("id") Mail mail){
+    @RequestMapping(value = "/read", method = RequestMethod.GET)
+    public ResponseEntity<Void> read(@RequestParam("id") long id) {
+        Mail mail = mailService.findById(id);
         mail.setReaded(true);
         mailService.save(mail);
-        return new ResponseEntity<Void>()
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/reply",method = RequestMethod.POST)
-    public ResponseEntity<Void> mailSubmit(@Valid @RequestBody SubmitMailDto submitMailDto,
+    public ResponseEntity<Void> mailSubmit(@Valid @RequestBody ReplyMailDto replyMailDto,
                                            @CurrentUser User user,
                                            HttpSession session){
         Mail mail = new Mail();
-        mail.setTitle(submitMailDto.getTitle());
-        mail.setContent(submitMailDto.getContent());
+        mail.setTitle(replyMailDto.getTitle());
+        mail.setContent(replyMailDto.getContent());
         mail.setFromUser(user);
         mail.setType(MailType.REPLYSEND);
-        mail.setToUser(userService.getById(submitMailDto.getToUser()));
+        mail.setToUser(userService.getById(replyMailDto.getToUser()));
         mail.setSource(EmailSource.INSIDE);
         mailService.save(mail);
 
-        Mail fromMail = mailService.findById(submitMailDto.getFromMailId());
+        Mail fromMail = mailService.findById(replyMailDto.getFromMailId());
         fromMail.setReplyMail(mail);
         mailService.save(fromMail);
 
@@ -127,8 +136,14 @@ public class MailController {
             }
             attachmentService.save(attachments);
         }
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
 
+    }
+
+    @RequestMapping(value = "/submit",method = RequestMethod.POST)
+    public ResponseEntity<Void> submitMail(@Valid @RequestBody SubmitMailDto submitMailDto){
+
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
 }

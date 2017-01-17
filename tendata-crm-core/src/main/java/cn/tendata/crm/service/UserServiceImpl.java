@@ -5,6 +5,8 @@ import cn.tendata.crm.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by minjay on 2016/11/14.
  */
@@ -16,4 +18,8 @@ public class UserServiceImpl extends EntityServiceSupport<User,Integer,UserRepos
         super(repository);
     }
 
+    @Override
+    public List<User> getApprovers(String stringAuthorities) {
+        return getRepository().findAllByStringAuthorities(stringAuthorities);
+    }
 }

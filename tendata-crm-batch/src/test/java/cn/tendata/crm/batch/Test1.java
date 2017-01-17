@@ -24,30 +24,30 @@ import java.util.Date;
 /**
  * Created by Luo Min on 2016/12/29.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = JobConfig.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(classes = JobConfig.class)
 public class Test1 {
 
-    @Autowired
-    protected JobLauncher jobLauncher;
+//    @Autowired
+//    protected JobLauncher jobLauncher;
+//
+//    @Autowired
+//    @Qualifier("billJob")
+//    protected Job job;
+//
+//    @Before
+//    public void setUp() throws Exception {
+//
+//    }
+//
+//    @After
+//    public void finish() throws Exception {
+//
+//    }
 
-    @Autowired
-    @Qualifier("billJob")
-    protected Job job;
-
-    @Before
-    public void setUp() throws Exception {
-
-    }
-
-    @After
-    public void finish() throws Exception {
-
-    }
-
-    @Test
-    public void test1() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
-        JobExecution result = jobLauncher.run(job, new JobParametersBuilder().addString("pa", new Date().toString()).toJobParameters());
-        System.out.println(result.toString());
-    }
+//    @Test
+//    public void test1() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+//        JobExecution result = jobLauncher.run(job, new JobParametersBuilder().addString("pa", new Date().toString()).toJobParameters());
+//        System.out.println(result.toString());
+//    }
 }

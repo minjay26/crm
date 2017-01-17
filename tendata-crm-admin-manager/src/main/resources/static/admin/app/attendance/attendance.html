@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/admin/">首页</a></li>
+            <li class="active">个人考勤</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+
+    <div class="main-content">
+        <ul class="nav nav-pills nav-justified" role="tablist">
+            <li role="presentation" class="active"><a href="#/attendance/working_register">上下班登记</a></li>
+            <li role="presentation"><a href="#/attendance/goout_register">外出登记</a></li>
+            <li role="presentation"><a href="#/attendance/leave_register">请假登记</a></li>
+            <li role="presentation"><a href="#/attendance/businessTrip_register">出差登记</a></li>
+            <li role="presentation"><a href="#/attendance/working_records">上下班记录</a></li>
+        </ul><hr>
+        <div class="jumbotron">
+            <h3 class="glyphicon glyphicon-info-sign">注意</h3>
+            <p>规定时间之前 30 分钟到之后 30 分钟这段时间可进行上班登记，规定时间之前 10 分钟到之后 100 分钟这段时间可进行下班登记</p>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>登记次序</th>
+                <th>登记类型</th>
+                <th>规定时间</th>
+                <th>登记时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+
+            <tbody ng-repeat="item in regulations">
+                <tr>
+                    <td>{{item.regulation.sort}}</td>
+                    <td>{{item.regulation.registrationType}}</td>
+                    <td>{{item.regulation.regulationDate}}</td>
+                    <td ng-if="item.registered">{{item.registrationDate | date:'yyyy-MM-dd HH:mm'}}</td>
+                    <td ng-if="!item.registered">未登记</td>
+                    <td ng-if="!item.registered && check(item.regulation.regulationDate)"><a href="javascript:void(0)" ng-click="register(item)">未登记</a></td>
+                    <td ng-if="!item.registered && !check(item.regulation.regulationDate)">不在登记时间段</td>
+                    <td ng-if="item.registered" class="glyphicon glyphicon-ok ok">已登记</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>

@@ -1,5 +1,6 @@
 package cn.tendata.crm.data.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -34,6 +35,7 @@ public class User extends AbstractEntityAuditable<Integer> implements UserDetail
 
     private String mailBox;
 
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(this.getStringAuthorities());
         return authorities;

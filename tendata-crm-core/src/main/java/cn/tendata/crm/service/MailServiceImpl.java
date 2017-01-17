@@ -1,7 +1,6 @@
 package cn.tendata.crm.service;
 
 import cn.tendata.crm.data.domain.Mail;
-import cn.tendata.crm.data.domain.MailAttachment;
 import cn.tendata.crm.data.domain.User;
 import cn.tendata.crm.data.repository.MailRepository;
 import cn.tendata.crm.qiniu.QiniuManager;
@@ -28,8 +27,17 @@ public class MailServiceImpl extends EntityServiceSupport<Mail,Long,MailReposito
         this.qiniuManager = qiniuManager;
     }
 
-    public Page<Mail> getAllByReaded(User user,Boolean readed, Pageable pageable){
-        return getRepository().findAllByToUserAndReaded(user,readed,pageable);
+    public Page<Mail> getAllByCategory(User user, int category, Pageable pageable) {
+        switch (category) {
+            case 1:
+                return getRepository().findAllByToUserAndReaded(user, false, pageable);
+            case 2:
+                return getRepository().findAll(pageable);
+            case 3:
+                return null;
+            default:return  null;
+        }
+
     }
 
     @Override

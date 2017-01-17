@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
  */
 public interface MailService extends EntityService<Mail,Long> {
 
-    Page<Mail> getAllByReaded(User user, Boolean readed, Pageable pageable);
+    Page<Mail> getAllByCategory(User user, int category, Pageable pageable);
 
     Response upload(String filename, byte[] bytes, String bucketName) throws QiniuException;
 }

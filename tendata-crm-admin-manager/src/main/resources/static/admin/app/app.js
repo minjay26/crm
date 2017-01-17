@@ -15,9 +15,52 @@ var app = angular.module('app', [
         'angularFileUpload'
     ])
     .config(function ($httpProvider) {
-        // var header = angular.element("meta[name='_csrf_header']").attr("content");
-        // var token = angular.element("meta[name='_csrf']").attr("content");
-        // $httpProvider.defaults.headers.common[header] = token;
+//         $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
+//         $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+//
+// // Override $http service's default transformRequest
+//         $httpProvider.defaults.transformRequest = [function(data) {
+//             /**
+//              * The workhorse; converts an object to x-www-form-urlencoded serialization.
+//              * @param {Object} obj
+//              * @return {String}
+//              */
+//             var param = function(obj) {
+//                 var query = '';
+//                 var name, value, fullSubName, subName, subValue, innerObj, i;
+//
+//                 for (name in obj) {
+//                     value = obj[name];
+//
+//                     if (value instanceof Array) {
+//                         for (i = 0; i < value.length; ++i) {
+//                             subValue = value[i];
+//                             fullSubName = name + '[' + i + ']';
+//                             innerObj = {};
+//                             innerObj[fullSubName] = subValue;
+//                             query += param(innerObj) + '&';
+//                         }
+//                     } else if (value instanceof Object) {
+//                         for (subName in value) {
+//                             subValue = value[subName];
+//                             fullSubName = name + '[' + subName + ']';
+//                             innerObj = {};
+//                             innerObj[fullSubName] = subValue;
+//                             query += param(innerObj) + '&';
+//                         }
+//                     } else if (value !== undefined && value !== null) {
+//                         query += encodeURIComponent(name) + '='
+//                             + encodeURIComponent(value) + '&';
+//                     }
+//                 }
+//
+//                 return query.length ? query.substr(0, query.length - 1) : query;
+//             };
+//
+//             return angular.isObject(data) && String(data) !== '[object File]'
+//                 ? param(data)
+//                 : data;
+//         }];
     })
 
     .config(function ($routeProvider) { // 用于页面跳转
@@ -28,13 +71,22 @@ var app = angular.module('app', [
         }).when('/emails/edit', {
             templateUrl: 'app/email/preview.html',
             controller: 'MailController'
-        }).when('/customer_service/delete', {
-            templateUrl: 'app/customer_service/customer_service_delete.html',
-            controller: 'CustomerServiceDeleteCtrl'
-        }).when('/customer_service/answer', {
-            templateUrl: 'app/customer_service/customer_service_edit.html',
-            controller: 'CustomerServiceAnswerCtrl'
-        });
+        }).when('/emails/submit', {
+            templateUrl: 'app/email/submit.html',
+            controller: 'MailController'
+        }).when('/attendance', {
+            templateUrl: 'app/attendance/attendance.html',
+            controller: 'RegulationController'
+        }).when('/attendance/working_register', {
+            templateUrl: 'app/attendance/attendance.html',
+            controller: 'RegulationController'
+        }).when('/attendance/working_records', {
+            templateUrl: 'app/attendance/workingRecords.html',
+            controller: 'RecordsController'
+        }).when('/attendance/goout_register', {
+            templateUrl: 'app/attendance/goOut.html',
+            controller: 'GoOutController'
+        });;
     })
 
     .controller('InitCtrl', function ($scope, $http, $rootScope, optionUrl, $cookies, $interval) {

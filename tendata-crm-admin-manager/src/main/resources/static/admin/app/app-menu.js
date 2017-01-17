@@ -13,7 +13,11 @@ angular.module('app')
                 children: [ {
                     name: '电子邮件',
                     href:'emails'
-                } ],
+                },
+                    {
+                        name: '个人考勤',
+                        href: 'attendance'
+                    }],
                 menuIcon: 'fa-desktop'
             },
 
