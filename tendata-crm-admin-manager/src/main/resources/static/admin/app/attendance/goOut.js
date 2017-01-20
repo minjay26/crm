@@ -37,32 +37,62 @@ angular.module('app')
             }
         }
 
-        $scope.apply = function () {
-            var reason = $scope.reason,
-                approver = $scope.approvers.selectedOption,
-                date1 = new Date(),
-                date2 = new Date();
-            date1.setHours($scope.startDate.getHours(), $scope.startDate.getMinutes());
-            var start = date1;
-            date2.setHours($scope.endDate.getHours(), $scope.endDate.getMinutes());
-            var end = date2;
+        $scope.apply = {
+            start: function () {
 
-            $http({
-                method: 'post',
-                url: optionUrl.apply,
-                data: {
-                    reason: reason,
-                    approver: approver,
-                    startDate: start,
-                    endDate: end
-                },
-            }).success(function (data) {
-                $scope.recordHided = false;
-                $scope.registerHided = true;
-                // getGoOutRecords();
-            }).error(function () {
-                $scope.openAlert('danger', '网络异常，请稍后再试或者联系管理员', 5000);
-            });
+                var reason = $scope.reason,
+                    approver = $scope.approvers.selectedOption,
+                    date1 = new Date(),
+                    date2 = new Date();
+                date1.setHours($scope.startDate.getHours(), $scope.startDate.getMinutes());
+                var start = date1;
+                date2.setHours($scope.endDate.getHours(), $scope.endDate.getMinutes());
+                var end = date2;
+                $http({
+                    method: 'post',
+                    url: optionUrl.apply,
+                    data: {
+                        reason: reason,
+                        approver: approver,
+                        startDate: start,
+                        endDate: end
+                    },
+                }).success(function (data) {
+                    $scope.recordHided = false;
+                    $scope.registerHided = true;
+                    getGoOutRecords();
+                }).error(function () {
+                    $scope.openAlert('danger', '网络异常，请稍后再试或者联系管理员', 5000);
+                });
+
+                // var sock = new SockJS("/endpointApply");
+                // var stomp = Stomp.over(sock);
+                // stomp.connect('guest', 'guest', function (frame) {
+                //     stomp.subscribe("/user/queue/notifications", $scope.apply.handleNotification())
+                // })
+                // stomp.send("/admin/message",approver);
+            },
+
+
+            handleNotification: function () {
+
+            }
+        }
+
+        $scope.statusTransform = function (status) {
+            var value;
+            switch (status) {
+                case "AUDITING":
+                    value = "审核中";
+                    break;
+                case "SUCCESS":
+                    value = "审核通过";
+                    break;
+                case "REJECT":
+                    value = "拒绝";
+                    break;
+            }
+            return value;
         }
 
         function getGoOutRecords() {

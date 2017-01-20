@@ -9,13 +9,13 @@ import cn.tendata.crm.service.RegistrationRegulationService;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +44,7 @@ public class AttendanceController {
         this.goOutRecordService = goOutRecordService;
     }
 
-    @RequestMapping(value = "regulations", method = RequestMethod.GET)
+    @RequestMapping(value = "/regulations", method = RequestMethod.GET)
     public ResponseEntity<List<RegistrationRecordDto>> getAllRegulation(
             @SortDefault(sort = {"regulationDate"}, direction = Sort.Direction.ASC) Sort sort, @CurrentUser User user) {
         List<RegistrationRegulation> regulations = registrationRegulationService.getAll(sort);
@@ -52,7 +52,7 @@ public class AttendanceController {
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "register", method = RequestMethod.POST)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<Void> register(@RequestParam("id") RegistrationRegulation regulation, @CurrentUser User user) {
         RegistrationRecord record = new RegistrationRecord();
         record.setRegulation(regulation);
@@ -62,20 +62,30 @@ public class AttendanceController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "working_records", method = RequestMethod.GET)
+    @RequestMapping(value = "/working_records", method = RequestMethod.GET)
     public ResponseEntity<Page<RegistrationRecord>> records(@PageableDefault(sort = {"registrationDate"}, direction = Sort.Direction.ASC) Pageable pageable,
-                                                            @CurrentUser User user) {
-        Page<RegistrationRecord> records = registrationRecordService.getByUser(user,pageable);
+                                                            @CurrentUser User user,
+                                                            @RequestParam(name = "startDate", required = false) DateTime startDate,
+                                                            @RequestParam(name = "endDate", required = false) DateTime endDate,
+                                                            @RequestParam(name = "registerType", required = false) String registerType) {
+        Page<RegistrationRecord> records = registrationRecordService.search(user, startDate, endDate, registerType, pageable);
         return new ResponseEntity<>(records,HttpStatus.OK);
     }
 
-    @RequestMapping(value = "apply",method = RequestMethod.POST)
+    @RequestMapping(value = "/apply",method = RequestMethod.POST)
     public ResponseEntity<Void> apply(@RequestBody MatterRecord record,@CurrentUser User user){
         record.setUser(user);
         GoOutRecord outRecord = new GoOutRecord();
         outRecord.setMatterRecord(record);
-    goOutRecordService.save(outRecord);
+        goOutRecordService.save(outRecord);
      return new ResponseEntity<Void>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/goOutRecords",method = RequestMethod.GET)
+    public ResponseEntity<Page<GoOutRecord>> goOutRecords(@PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable,
+                                             @CurrentUser User user) {
+        Page<GoOutRecord> records = goOutRecordService.getAll(pageable);
+        return new ResponseEntity<>(records,HttpStatus.OK);
     }
 
 

@@ -4,6 +4,7 @@ import cn.tendata.crm.data.domain.RegistrationRecord;
 import cn.tendata.crm.data.domain.RegistrationRegulation;
 import cn.tendata.crm.data.domain.User;
 import cn.tendata.crm.model.RegistrationRecordDto;
+import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,4 +18,6 @@ public interface RegistrationRecordService extends EntityService<RegistrationRec
     List<RegistrationRecordDto> getTodayRegistration(List<RegistrationRegulation> regulations,User user);
 
     Page<RegistrationRecord> getByUser(User user, Pageable pageable);
+
+    Page<RegistrationRecord> search(User user, DateTime startDate,DateTime endDate,String registerType, Pageable pageable);
 }

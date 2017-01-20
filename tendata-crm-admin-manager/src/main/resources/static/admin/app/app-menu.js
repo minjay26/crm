@@ -17,6 +17,10 @@ angular.module('app')
                     {
                         name: '个人考勤',
                         href: 'attendance'
+                    },
+                    {
+                        name: '通讯录',
+                        href: 'contact-book'
                     }],
                 menuIcon: 'fa-desktop'
             },

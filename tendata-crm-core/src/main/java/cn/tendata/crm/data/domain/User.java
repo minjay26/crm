@@ -2,16 +2,15 @@ package cn.tendata.crm.data.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
+import org.joda.time.DateTime;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,6 +21,11 @@ import java.util.List;
 public class User extends AbstractEntityAuditable<Integer> implements UserDetails{
 
     private static final long serialVersionUID = 1L;
+
+    public static class UserStatus{
+        public static final int ONLINE = 1;
+        public static final int OFFLINE = 0;
+    }
 
     @Id
     @GeneratedValue
@@ -34,6 +38,20 @@ public class User extends AbstractEntityAuditable<Integer> implements UserDetail
     private String stringAuthorities;
 
     private String mailBox;
+
+    private int loginCount;
+
+    private DateTime lastLoginAt;
+
+    private int status;
+
+    public User() {
+    }
+
+    public User(Integer id, String username) {
+        this.id = id;
+        this.username = username;
+    }
 
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -82,6 +100,33 @@ public class User extends AbstractEntityAuditable<Integer> implements UserDetail
 
     public void setMailBox(String mailBox) {
         this.mailBox = mailBox;
+    }
+
+    @Column(name="login_count", nullable=false)
+    public int getLoginCount() {
+        return loginCount;
+    }
+
+    public void setLoginCount(int loginCount) {
+        this.loginCount = loginCount;
+    }
+
+    @Column(name="last_login_at")
+    public DateTime getLastLoginAt() {
+        return lastLoginAt;
+    }
+
+    public void setLastLoginAt(DateTime lastLoginAt) {
+        this.lastLoginAt = lastLoginAt;
+    }
+
+    @Column(name="status")
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public boolean isAccountNonExpired() {

@@ -1,24 +1,19 @@
 package cn.tendata.crm.webapp.config;
 
 
-import cn.tendata.crm.admin.web.util.SecurityAccess;
 import cn.tendata.crm.service.LoginUserService;
+import cn.tendata.crm.webapp.config.support.LogoutHandle;
+import cn.tendata.crm.webapp.context.UserAuthenticationSuccessListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
-import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler;
-import org.springframework.security.web.access.expression.WebExpressionVoter;
+import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Profile("dev")
@@ -28,8 +23,20 @@ import java.util.List;
 public class DevSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Bean
+	public SimpleUrlLogoutSuccessHandler logoutHandle() {
+		return new LogoutHandle();
+	}
+
+	;
+
+	@Bean
     public LoginUserService loginUserService(){
 		return  new LoginUserService();
+	}
+
+	@Bean
+	public UserAuthenticationSuccessListener userAuthenticationSuccessListener() {
+		return new UserAuthenticationSuccessListener();
 	}
 
 	@Override
@@ -49,7 +56,7 @@ public class DevSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.csrf().disable()
 				.logout()
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.logoutSuccessHandler(logoutHandle())
             .and()
         .headers()
             .frameOptions()

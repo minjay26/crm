@@ -86,6 +86,12 @@ var app = angular.module('app', [
         }).when('/attendance/goout_register', {
             templateUrl: 'app/attendance/goOut.html',
             controller: 'GoOutController'
+        }).when('/contact-book', {
+            templateUrl: 'app/contactBook/contact-book.html',
+            controller: 'ContactBookCtrl'
+        }).when('/chat', {
+            templateUrl: 'app/contactBook/chat.html',
+            controller: 'ChatCtrl'
         });;
     })
 

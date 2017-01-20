@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="col-md-4 ">
+        <ul class="breadcrumb">
+            <li><i class="fa fa-home"></i><a href="/admin/">首页</a></li>
+            <li class="active">通讯录</li>
+        </ul>
+    </div>
+</div>
+<div class="content">
+    <div class="main-content">
+        <ul class="nav nav-pills" role="tablist">
+            <li role="presentation"><a href="javascript:void(0)"  ng-click="getStatusUser('')">全部</a></li>
+            <li role="presentation"><a href="javascript:void(0)"  ng-click="getStatusUser(1)">在线</a></li>
+            <li role="presentation"><a href="javascript:void(0)"  ng-click="getStatusUser(0)">离线</a></li>
+        </ul>
+         <ul class="list-group">
+             <li ng-repeat="user in users" class="list-group-item">
+                 {{user.username}}<button ng-if="user.status==1" class="badge btn-primary" ng-click="beginChat(user)">发起聊天</button>
+             </li>
+         </ul>
+    </div>
+</div>

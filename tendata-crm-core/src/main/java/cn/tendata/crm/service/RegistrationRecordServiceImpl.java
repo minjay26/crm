@@ -7,6 +7,7 @@ import cn.tendata.crm.data.repository.RegistrationRecordPredicates;
 import cn.tendata.crm.data.repository.RegistrationRecordRepository;
 import cn.tendata.crm.model.RegistrationRecordDto;
 import cn.tendata.crm.util.CollectionUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,5 +44,10 @@ public class RegistrationRecordServiceImpl extends EntityServiceSupport<Registra
     @Override
     public Page<RegistrationRecord> getByUser(User user, Pageable pageable) {
         return getRepository().findByUser(user,pageable);
+    }
+
+    @Override
+    public Page<RegistrationRecord> search(User user, DateTime startDate, DateTime endDate, String registerType, Pageable pageable) {
+        return getRepository().findAll(RegistrationRecordPredicates.search(user,startDate,endDate,registerType),pageable);
     }
 }

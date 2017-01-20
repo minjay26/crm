@@ -18,6 +18,8 @@ angular.module('app')
         register: "attendance/register",
         workingRecords: "attendance/working_records",
         goOutRecords: "attendance/goOutRecords",
-            apply:"attendance/apply"
+        apply:"attendance/apply",
+
+        getUsers:"users"
     });
 

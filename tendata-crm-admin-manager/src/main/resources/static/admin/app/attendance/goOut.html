@@ -23,7 +23,7 @@
          审批人：            <select ng-class="form-control"
                                  ng-options="option.username for option in approvers"
                                  ng-model="approvers.selectedOption"></select><br><br>
-            <button type="button" class="btn btn-primary btn-sm" ng-click="apply()">申请</button>
+            <button type="button" class="btn btn-primary btn-sm" ng-click="apply.start()">申请</button>
         </div>
 
         <div id="goOutRecord" ng-hide="recordHided" >
@@ -31,16 +31,18 @@
                 <thead>
                 <tr>
                     <th>序号</th>
-                    <th>登记类型</th>
                     <th>登记时间</th>
+                    <th>外出原因</th>
+                    <th>状态</th>
                 </tr>
                 </thead>
 
                 <tbody ng-repeat="item in items">
                 <tr>
                     <td>{{$index+1}}</td>
-                    <td>{{item.regulation.registrationType}}</td>
-                    <td>{{item.registrationDate | date:'yyyy-MM-dd HH:mm'}}</td>
+                    <td>{{item.createdDate | date:'yyyy-MM-dd HH:mm'}}</td>
+                    <td>{{item.matterRecord.reason}}</td>
+                    <td>{{statusTransform(item.matterRecord.status)}}</td>
                 </tr>
                 </tbody>
             </table>

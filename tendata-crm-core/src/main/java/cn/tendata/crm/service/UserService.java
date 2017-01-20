@@ -10,4 +10,6 @@ import java.util.List;
 public interface UserService extends EntityService<User,Integer> {
 
     List<User> getApprovers(String stringAuthorities);
+
+    List<User> getByStatus(Integer status,User user);
 }
