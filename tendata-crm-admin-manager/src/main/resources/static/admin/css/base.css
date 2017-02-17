@@ -2,7 +2,7 @@
     color: blue;
 }
 
-.send-email{
+.send-email {
     height: 150px;
     width: 300px;
 }
@@ -15,7 +15,30 @@
     background-color: #C1D9F3;
 }
 
-.loading{
+.loading {
     background: url(../assets/img/submiting.gif) no-repeat center;
+}
+
+.chat-li {
+    position: relative;
+    clear: both;
+    display: inline-block;
+    padding: 16px 40px 16px 20px;
+    margin: 0 0 20px 0;
+    font: 11px/15px 'Noto Sans', sans-serif;
+    border-radius: 10px;
+    background-color: rgba(25, 147, 147, 0.2);
+}
+
+.chat-li-right {
+    float: right;
+    margin-right: 80px;
+    color: #0AD5C1;
+}
+
+.chat-li-left {
+    float: left;
+    margin-left: 80px;
+    color: #0EC879;
 }
 

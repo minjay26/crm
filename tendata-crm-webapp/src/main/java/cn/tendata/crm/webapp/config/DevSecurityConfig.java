@@ -4,6 +4,7 @@ package cn.tendata.crm.webapp.config;
 import cn.tendata.crm.service.LoginUserService;
 import cn.tendata.crm.webapp.config.support.LogoutHandle;
 import cn.tendata.crm.webapp.context.UserAuthenticationSuccessListener;
+import cn.tendata.crm.webapp.context.UserDestroySessionListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -13,7 +14,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 
 @Profile("dev")
@@ -27,10 +28,18 @@ public class DevSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new LogoutHandle();
 	}
 
-	;
+	@Bean
+	public HttpSessionEventPublisher sessionEventPublisher() {
+		return new HttpSessionEventPublisher();
+	}
 
 	@Bean
-    public LoginUserService loginUserService(){
+	public UserDestroySessionListener userDestroySessionListener() {
+		return new UserDestroySessionListener();
+	}
+
+	@Bean
+	public LoginUserService loginUserService() {
 		return  new LoginUserService();
 	}
 
@@ -56,49 +65,12 @@ public class DevSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.csrf().disable()
 				.logout()
-				.logoutSuccessHandler(logoutHandle())
+//				.logoutSuccessHandler(logoutHandle())
             .and()
-        .headers()
-            .frameOptions()
-            .sameOrigin();
+				.headers()
+				.frameOptions()
+				.sameOrigin();
 	}
 
-//	@Bean
-//	public AffirmativeBased accessDecisionManager() {
-//		List<WebExpressionVoter> list=new ArrayList<>();
-//		list.add(webExpressionVoter());
-//		AffirmativeBased affirmativeBased = new AffirmativeBased(list);
-//		return affirmativeBased;
-//	}
-
-//	@Bean
-//	public DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler() {
-//		DefaultWebSecurityExpressionHandler defaultWebSecurityExpressionHandler = new DefaultWebSecurityExpressionHandler();
-//		defaultWebSecurityExpressionHandler.setRoleHierarchy(roleHierarchy());
-//		return defaultWebSecurityExpressionHandler;
-//	}
-//
-//	@Bean
-//	public RoleHierarchyImpl roleHierarchy() {
-//		RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-//		String roleHierarchyStringRepresentation = SecurityAccess.PERMISSION_ALL + ">" + SecurityAccess.PERMISSION_ADMIN_VIEW;
-//		roleHierarchy.setHierarchy(roleHierarchyStringRepresentation);
-//		return roleHierarchy;
-//	}
-//
-////	@Bean
-////	public RoleHierarchyVoter roleVoter() {
-////		return new RoleHierarchyVoter(roleHierarchy());
-////	}
-//
-//	@Bean
-//	public WebExpressionVoter webExpressionVoter() {
-//		WebExpressionVoter webExpressionVoter = new WebExpressionVoter();
-//		webExpressionVoter.setExpressionHandler(defaultWebSecurityExpressionHandler());
-//		return webExpressionVoter;
-//	}
-
-
-	
 
 }

@@ -1,5 +1,7 @@
 server:
   port: 8026
+  session:
+    timeout: 600
 
 logging:
   path: logs/
@@ -7,7 +9,7 @@ logging:
     root: INFO
 
 spring:
-  profiles.active: mysql,dev
+  profiles.active: mysql,dev,mongodb
   jpa:
     open-in-view: true
     show-sql: true
@@ -20,6 +22,7 @@ spring:
       enabled: true
       cache: false
       mode: LEGACYHTML5
+
 
 security:
   ignored: /favicon.ico,css/**,/js/**,/fonts/**,/img/**,/webjars/**,/admin/app/**,/admin/assets/**,/admin/css/**,/admin/html/**,/admin/images/**
@@ -39,6 +42,13 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
       ddl-auto: update
+
+---
+spring:
+  profiles: mongodb
+  data:
+    mongodb:
+          uri: mongodb://localhost/test
 
 
 

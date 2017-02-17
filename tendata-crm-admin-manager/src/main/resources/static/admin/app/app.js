@@ -8,12 +8,12 @@
 
 
 var app = angular.module('app', [
-        'ngRoute',
-        'ui.bootstrap',
-        'ngCookies',
-        'toggle-switch',
-        'angularFileUpload'
-    ])
+    'ngRoute',
+    'ui.bootstrap',
+    'ngCookies',
+    'toggle-switch',
+    'angularFileUpload'
+])
     .config(function ($httpProvider) {
 //         $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
 //         $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -63,6 +63,7 @@ var app = angular.module('app', [
 //         }];
     })
 
+
     .config(function ($routeProvider) { // 用于页面跳转
 
         $routeProvider.when('/emails', {
@@ -92,7 +93,8 @@ var app = angular.module('app', [
         }).when('/chat', {
             templateUrl: 'app/contactBook/chat.html',
             controller: 'ChatCtrl'
-        });;
+        });
+        ;
     })
 
     .controller('InitCtrl', function ($scope, $http, $rootScope, optionUrl, $cookies, $interval) {

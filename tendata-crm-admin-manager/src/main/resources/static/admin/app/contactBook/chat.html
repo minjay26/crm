@@ -10,25 +10,36 @@
     <div class="main-content">
         <div style="width:240px;height: 800px;border: solid 10px #ADC5DD;float: left;">
             <ul class="nav nav-pills nav-stacked" role="tablist">
-                <li role="presentation"><a href="javascript:void(0)" ng-click="">最近聊天</a></li>
-                <div ng-hide="true">
-kjyukyt<br>fdfdf
+                <li role="presentation"><a href="javascript:void(0)" ng-click="recentChat()">最近聊天</a>
+                    <div ng-show="recentChatDisplay">
+                        <ul class="list-group">
+                            <li ng-repeat="username in recentChatUsers" class="list-group-item" style="color: green;">
+                                {{username}}
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li role="presentation"><a href="javascript:void(0)" ng-click="contactBook()">通讯录</a></li>
+                <div ng-show="contactBookDisplay">
+                    <ul class="list-group">
+                        <li ng-repeat="user in onlineUsers" class="list-group-item" style="color: green;">
+                            {{user.username}}
+                        </li>
+                    </ul>
                 </div>
-                <li role="presentation"><a href="javascript:void(0)" ng-click="">通讯录</a></li>
-                <!--<div ng-hdie="chatMenuDisplay">-->
-                    <!--<ul class="list-group">-->
-                        <!--<li ng-repeat="user in onlineUsers" class="list-group-item">-->
-                            <!--{{user.username}}-->
-                        <!--</li>-->
-                    <!--</ul>-->
-                <!--</div>-->
             </ul>
 
         </div>
         <div style="width:1000px;height: 800px;border: solid 10px #ADC5DD;float: left;">
-            <textarea style="width:990px;height: 600px;border: solid 10px #CCCCCC;"></textarea>
-            <textarea style="width:990px;height: 140px;border: solid 10px #CCCCCC;"></textarea>
-            <button class="btn-primary pull-right">发送</button>
+            <h6 style="color: blue">{{currentChatUser}}</h6>
+            <div>
+                <ul class="chat-thread" style="width:990px;height: 600px;border: solid 10px #CCCCCC;overflow:auto">
+                    <li ng-repeat="record in recentChatRecords" ng-class="{true: 'chat-li chat-li-left', false: 'chat-li chat-li-right'}[record.left]">{{record.content}}</li>
+                </ul>
+            </div>
+            <!--<textarea style="width:990px;height: 600px;border: solid 10px #CCCCCC;" id="chat" ng-model="chatContent"></textarea>-->
+            <textarea style="width:990px;height: 140px;border: solid 10px #CCCCCC;" ng-class="replyContentClass" ng-model="replyContent" ng-focus="replyFocus();"></textarea>
+            <button class="btn-primary pull-right" ng-click="sendMessage()">发送</button>
         </div>
 
     </div>
