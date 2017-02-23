@@ -97,7 +97,7 @@ var app = angular.module('app', [
         ;
     })
 
-    .controller('InitCtrl', function ($scope, $http, $rootScope, optionUrl, $cookies, $interval) {
+    .controller('InitCtrl', function ($scope, $http, $rootScope, $location,optionUrl, $cookies, $interval) {
         // console.log('app init...'); 会导致ie9停止运行
         if (window.console) { // 检查是否为ie9此种奇葩版本浏览器
             var startMsg = 'app initializing...\n';
@@ -130,6 +130,7 @@ var app = angular.module('app', [
         }
         $rootScope.positiveIntReg = /^\+?[1-9]\d*$/;
         $rootScope.loadDivVisible = true;
+
     })
 
     .controller('ModalAlertCtrl', function ($scope, $uibModal, optionUrl) {

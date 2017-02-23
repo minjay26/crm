@@ -53,7 +53,7 @@ angular.module('app')
             if (currentUserChatCache) {
                 Array.prototype.push.apply(recentChatRecordData, JSON.parse(currentUserChatCache));
             }
-            sessionStorage.setItem($scope.currentChatUser,JSON.stringify(recentChatRecordData));
+            sessionStorage.setItem($scope.currentChatUser, JSON.stringify(recentChatRecordData));
         }
 
         function handleNotification(message) {
