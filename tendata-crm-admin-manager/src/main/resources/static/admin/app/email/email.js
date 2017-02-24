@@ -24,7 +24,6 @@ angular.module('app')
                 {value: '7', name: '查询邮件'},
 
 
-
             ],
             selectedOption: {value: '1', name: '未读邮件'}
         };
@@ -39,7 +38,7 @@ angular.module('app')
             $http.get(optionUrl.mails, {
                 withCredentials: true,
                 params: {
-                    category :index,
+                    category: index,
                     page: $scope.currentPage - 1,
                 }
             }).success(function (data) { // 成功从后台获取数据
@@ -60,7 +59,7 @@ angular.module('app')
             getData();
         };
 
-        $scope.submit=function () {
+        $scope.submit = function () {
             var toUser = $scope.submit_toUser,
                 title = $scope.submit_title,
                 content = $scope.submit_content;
@@ -87,7 +86,7 @@ angular.module('app')
                 getData(); // 初始化list数据
         }
 
-        $scope.previewMail=function (item) {
+        $scope.previewMail = function (item) {
             $rootScope.mail = {};
             $rootScope.editModel = item;
             $http.get(optionUrl.mailRead, {
@@ -102,7 +101,7 @@ angular.module('app')
 
         }
 
-        $scope.goBackMails = function(){
+        $scope.goBackMails = function () {
             $location.url('/emails');
         }
 
@@ -117,29 +116,27 @@ angular.module('app')
         }
 
 
+        $scope.reply = function () {
+            $http({
+                method: "post",
+                url: optionUrl.mailSubmit,
+                data: {
+                    fromMailId: $rootScope.editModel.id,
+                    content: $scope.replyContent,
+                    title: $scope.title,
+                    toUser: $rootScope.editModel.fromUser.id,
+                },
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                }
+            }).success(function (data, status) { // 成功与后台完成交互
+                $scope.isHide = false;
+                $scope.replyContentShow = true;
 
-
-       $scope.reply = function(){
-           $http({
-               method: "post",
-               url: optionUrl.mailSubmit,
-               data: {
-                   fromMailId: $rootScope.editModel.id,
-                   content: $scope.replyContent,
-                   title: $scope.title,
-                   toUser: $rootScope.editModel.fromUser.id,
-               },
-               headers: {
-                   'Content-Type': 'application/json;charset=utf-8'
-               }
-           }).success(function (data, status) { // 成功与后台完成交互
-               $scope.isHide = false;
-               $scope.replyContentShow = true;
-
-           }).error(function (data, status) {
-               $scope.replyMsg = "邮件发送失败，请重试";
-           });
-       }
+            }).error(function (data, status) {
+                $scope.replyMsg = "邮件发送失败，请重试";
+            });
+        }
 
         if (!$scope.items) {
             getData();

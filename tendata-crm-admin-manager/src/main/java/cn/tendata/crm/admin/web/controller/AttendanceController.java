@@ -2,6 +2,7 @@ package cn.tendata.crm.admin.web.controller;
 
 import cn.tendata.crm.admin.web.bind.annotation.CurrentUser;
 import cn.tendata.crm.data.domain.*;
+import cn.tendata.crm.message.MessageProcess;
 import cn.tendata.crm.model.RegistrationRecordDto;
 import cn.tendata.crm.service.GoOutRecordService;
 import cn.tendata.crm.service.RegistrationRecordService;
@@ -15,7 +16,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,14 +34,17 @@ public class AttendanceController {
     private final RegistrationRegulationService registrationRegulationService;
     private final RegistrationRecordService registrationRecordService;
     private final GoOutRecordService goOutRecordService;
+    private final MessageProcess messageProcess;
 
     @Autowired
     public AttendanceController(RegistrationRegulationService registrationRegulationService,
                                 RegistrationRecordService registrationRecordService,
-                                GoOutRecordService goOutRecordService) {
+                                GoOutRecordService goOutRecordService,
+                                MessageProcess messageProcess) {
         this.registrationRegulationService = registrationRegulationService;
         this.registrationRecordService = registrationRecordService;
         this.goOutRecordService = goOutRecordService;
+        this.messageProcess = messageProcess;
     }
 
     @RequestMapping(value = "/regulations", method = RequestMethod.GET)
@@ -69,23 +72,24 @@ public class AttendanceController {
                                                             @RequestParam(name = "endDate", required = false) DateTime endDate,
                                                             @RequestParam(name = "registerType", required = false) String registerType) {
         Page<RegistrationRecord> records = registrationRecordService.search(user, startDate, endDate, registerType, pageable);
-        return new ResponseEntity<>(records,HttpStatus.OK);
+        return new ResponseEntity<>(records, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/apply",method = RequestMethod.POST)
-    public ResponseEntity<Void> apply(@RequestBody MatterRecord record,@CurrentUser User user){
+    @RequestMapping(value = "/apply", method = RequestMethod.POST)
+    public ResponseEntity<Void> apply(@RequestBody MatterRecord record, @CurrentUser User user) {
         record.setUser(user);
         GoOutRecord outRecord = new GoOutRecord();
         outRecord.setMatterRecord(record);
-        goOutRecordService.save(outRecord);
-     return new ResponseEntity<Void>(HttpStatus.OK);
+        outRecord = goOutRecordService.save(outRecord);
+        messageProcess.apply(outRecord);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/goOutRecords",method = RequestMethod.GET)
+    @RequestMapping(value = "/goOutRecords", method = RequestMethod.GET)
     public ResponseEntity<Page<GoOutRecord>> goOutRecords(@PageableDefault(sort = {"createdDate"}, direction = Sort.Direction.DESC) Pageable pageable,
-                                             @CurrentUser User user) {
-        Page<GoOutRecord> records = goOutRecordService.getAll(pageable);
-        return new ResponseEntity<>(records,HttpStatus.OK);
+                                                          @CurrentUser User user) {
+        Page<GoOutRecord> records = goOutRecordService.getAll(pageable,user);
+        return new ResponseEntity<>(records, HttpStatus.OK);
     }
 
 

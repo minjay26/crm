@@ -19,7 +19,7 @@ angular.module('app')
 
         $scope.check = function (date) {
             var now = new Date();
-            var regulationDate = new Date(now.getFullYear() + '-' + (now.getMonth()+1)+ '-' + now.getDate() + ' ' + date);
+            var regulationDate = new Date(now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate() + ' ' + date);
             if (now.getTime() >= regulationDate.getTime() - 0.5 * 60 * 60 * 1000 && now.getTime() < regulationDate.getTime() + 0.5 * 60 * 60 * 1000) {
                 return true;
             }

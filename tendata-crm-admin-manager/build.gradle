@@ -8,8 +8,6 @@ dependencies {
     compile project(':tendata-crm-core')
     compile "org.springframework:spring-webmvc"
     compile "org.springframework:spring-web"
-    compile group: 'org.springframework', name: 'spring-messaging', version: '4.3.0.RELEASE'
-    compile group: 'org.springframework', name: 'spring-websocket', version: '4.3.0.RELEASE'
     compile "org.springframework.security:spring-security-core"
     compile "org.springframework.security:spring-security-config"
     compile "com.fasterxml.jackson.core:jackson-databind"

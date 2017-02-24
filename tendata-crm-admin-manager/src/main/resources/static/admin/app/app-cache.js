@@ -3,5 +3,5 @@
  */
 angular.module('app')
     .factory('chatUsersCache', function ($cacheFactory) {
-    return $cacheFactory("chatUsersCache")
-})
+        return $cacheFactory("chatUsersCache")
+    })

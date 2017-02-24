@@ -64,19 +64,17 @@ angular.module('app')
                 }).error(function () {
                     $scope.openAlert('danger', '网络异常，请稍后再试或者联系管理员', 5000);
                 });
-
-                // var sock = new SockJS("/endpointApply");
-                // var stomp = Stomp.over(sock);
-                // stomp.connect('guest', 'guest', function (frame) {
-                //     stomp.subscribe("/user/queue/notifications", $scope.apply.handleNotification())
-                // })
-                // stomp.send("/admin/message",approver);
             },
+        }
 
+        var sock = new SockJS("/endpointApply"),
+            stomp = Stomp.over(sock);
+        stomp.connect('guest', 'guest', function (frame) {
+            stomp.subscribe('/user/queue/notifications', handleNotification)
+        })
 
-            handleNotification: function () {
-
-            }
+        function handleNotification(message) {
+            $scope.openAlert('s', '网络异常，请稍后再试或者联系管理员', 5000);
         }
 
         $scope.statusTransform = function (status) {
@@ -106,7 +104,7 @@ angular.module('app')
                 $scope.totalItems = data.totalElements;
                 $scope.items = data.content;
             }).error(function () {
-                $scope.openAlert('danger', '网络异常，请稍后再试或者联系管理员', 5000);
+                $scope.openAlert('success', '你有新消息', 5000);
             });
         }
 

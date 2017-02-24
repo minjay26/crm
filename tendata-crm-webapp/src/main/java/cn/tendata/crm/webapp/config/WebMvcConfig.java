@@ -2,6 +2,8 @@ package cn.tendata.crm.webapp.config;
 
 import cn.tendata.crm.admin.web.bind.support.CurrentUserHandlerMethodArgumentResolver;
 import cn.tendata.crm.admin.web.util.StringToDatetimeConverter;
+import cn.tendata.crm.message.MessageProcess;
+import cn.tendata.crm.message.MessageProcessGateway;
 import cn.tendata.crm.qiniu.QiniuManager;
 import cn.tendata.crm.qiniu.QiniuManagerImpl;
 import com.qiniu.storage.UploadManager;
@@ -9,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -36,6 +39,13 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter{
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
         argumentResolvers.add(currentUserHandlerMethodArgumentResolver());
+
+    }
+
+    @Bean
+    public MessageProcess messageProcess(SimpMessagingTemplate messagingTemplate){
+
+        return new MessageProcessGateway(messagingTemplate);
 
     }
 

@@ -29,10 +29,10 @@ angular.module('app')
                 method: 'get',
                 url: optionUrl.workingRecords,
                 params: {
-                    page: $scope.currentPage-1,
-                    startDate:$scope.dt.startDate,
-                    endDate:$scope.dt.endDate,
-                    registerType:$scope.registerTypes.selectedOption.name
+                    page: $scope.currentPage - 1,
+                    startDate: $scope.dt.startDate,
+                    endDate: $scope.dt.endDate,
+                    registerType: $scope.registerTypes.selectedOption.name
                 },
             }).success(function (data) {
                 $scope.totalItems = data.totalElements;
@@ -44,13 +44,12 @@ angular.module('app')
         }
 
 
-
         $scope.changeType = function () {
             getWorkingRecord();
         }
 
         $scope.search = function () {
-             getWorkingRecord();
+            getWorkingRecord();
         }
 
         $scope.pageChanged = function () {

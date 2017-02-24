@@ -24,7 +24,7 @@ angular.module('app')
         }
 
         $scope.beginChat = function (user) {
-            $location.url("/chat?user="+user.username)
+            $location.url("/chat?user=" + user.username)
         }
 
 

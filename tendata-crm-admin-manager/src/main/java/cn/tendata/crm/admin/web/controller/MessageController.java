@@ -36,4 +36,5 @@ public class MessageController {
         chatMessageService.save(chatMessage);
         messagingTemplate.convertAndSendToUser(chatMessage.getToUser(),"/queue/notifications",chatMessage);
     }
+
 }

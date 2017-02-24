@@ -1,6 +1,7 @@
 package cn.tendata.crm.service;
 
 import cn.tendata.crm.data.domain.GoOutRecord;
+import cn.tendata.crm.data.domain.User;
 import cn.tendata.crm.data.repository.GoOutRecordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +20,7 @@ public class GoOutRecordServiceImpl extends EntityServiceSupport<GoOutRecord,Lon
     }
 
     @Override
-    public Page<GoOutRecord> getAll(Pageable pageable) {
-        return getRepository().findAll(pageable);
+    public Page<GoOutRecord> getAll(Pageable pageable, User user) {
+        return getRepository().findByMatterRecord_User(user,pageable);
     }
 }

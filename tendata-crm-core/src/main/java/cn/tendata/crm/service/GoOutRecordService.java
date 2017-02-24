@@ -1,6 +1,7 @@
 package cn.tendata.crm.service;
 
 import cn.tendata.crm.data.domain.GoOutRecord;
+import cn.tendata.crm.data.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,5 +10,5 @@ import org.springframework.data.domain.Pageable;
  */
 public interface GoOutRecordService extends EntityService<GoOutRecord,Long> {
 
-    Page<GoOutRecord> getAll(Pageable pageable);
+    Page<GoOutRecord> getAll(Pageable pageable, User user);
 }
